@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/personsFragment">
+    <fragment
+        android:id="@+id/episodesFragment"
+        android:name="com.example.rick_and_mortywiki.UI.Fragments.EpisodesFragment"
+        android:label="fragment_episodes"
+        tools:layout="@layout/fragment_episodes" >
+        <action
+            android:id="@+id/episodesFragment_to_locationsFragment"
+            app:destination="@id/locationsFragment" />
+        <action
+            android:id="@+id/episodesFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/episodesFragment_to_personsFragment3"
+            app:destination="@id/personsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/locationsFragment"
+        android:name="com.example.rick_and_mortywiki.UI.Fragments.LocationsFragment"
+        android:label="fragment_locations"
+        tools:layout="@layout/fragment_locations" >
+        <action
+            android:id="@+id/locationsFragment_to_episodesFragment"
+            app:destination="@id/episodesFragment" />
+        <action
+            android:id="@+id/locationsFragment_to_personsFragment"
+            app:destination="@id/personsFragment" />
+        <action
+            android:id="@+id/locationsFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.rick_and_mortywiki.UI.Fragments.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_searchFragment_to_personsFragment3"
+            app:destination="@id/personsFragment" />
+        <action
+            android:id="@+id/searchFragment_to_locationsFragment"
+            app:destination="@id/locationsFragment" />
+        <action
+            android:id="@+id/searchFragment_to_episodesFragment"
+            app:destination="@id/episodesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/personsFragment"
+        android:name="com.example.rick_and_mortywiki.UI.Fragments.PersonsFragment"
+        android:label="fragment_persons"
+        tools:layout="@layout/fragment_persons" >
+        <action
+            android:id="@+id/personsFragment_to_locationsFragment"
+            app:destination="@id/locationsFragment" />
+        <action
+            android:id="@+id/personsFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/personsFragment_to_episodesFragment"
+            app:destination="@id/episodesFragment" />
+    </fragment>
+</navigation>
