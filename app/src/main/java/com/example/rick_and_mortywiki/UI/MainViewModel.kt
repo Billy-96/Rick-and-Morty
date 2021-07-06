@@ -4,10 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.rick_and_mortywiki.Model.DataClasses.CharacterNet
-import com.example.rick_and_mortywiki.Model.DataClasses.Episode
-import com.example.rick_and_mortywiki.Model.DataClasses.EpisodeNet
-import com.example.rick_and_mortywiki.Model.DataClasses.LocationNet
+import com.example.rick_and_mortywiki.Model.DataClasses.*
 import com.example.rick_and_mortywiki.Model.Repo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -21,25 +18,29 @@ class MainViewModel : ViewModel() {
     val liveDataOneEpisode = MutableLiveData<Episode>()
     private val repository = Repo()
 
+    val liveDataFindCharacter = MutableLiveData<CharacterNet>()
+    val liveDataFindLocation = MutableLiveData<LocationNet>()
+    val liveDataFindEpisode = MutableLiveData<EpisodeNet>()
+
     init {
         getCharacters()
         getLocations()
         getEpisodes()
     }
 
-    private fun getEpisodes() {
+    fun getEpisodes(page:Int = 1,name:String = "",episode:String = "") {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val response =
-                    repository.getEpisodesFromNet("","")
-                if (response.isSuccessful){
+                    repository.getEpisodesFromNet(page,name, episode)
+                if (response.isSuccessful) {
                     val episodes = response.body()
-                    Log.i("MyTag",episodes.toString())
-                    withContext(Dispatchers.Main){
-                        livedataEpisodes.value=episodes!!
+                    Log.i("MyTag", episodes.toString())
+                    withContext(Dispatchers.Main) {
+                        livedataEpisodes.value = episodes!!
                     }
                 }
-            }catch (e: HttpException) {
+            } catch (e: HttpException) {
                 Log.i("MYTAG", e.message().toString())
             } catch (t: Throwable) {
                 Log.i("MYTAG", t.message.toString())
@@ -47,19 +48,19 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    private fun getLocations() {
+    fun getLocations(page:Int = 1) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val response =
-                    repository.getLocationsFromNet("","","")
-                if (response.isSuccessful){
+                    repository.getLocationsFromNet(page,"", "", "")
+                if (response.isSuccessful) {
                     val locations = response.body()
-                    Log.i("MyTag",locations.toString())
-                    withContext(Dispatchers.Main){
-                        liveDataLocations.value=locations!!
+                    Log.i("MyTag", locations.toString())
+                    withContext(Dispatchers.Main) {
+                        liveDataLocations.value = locations!!
                     }
                 }
-            }catch (e: HttpException) {
+            } catch (e: HttpException) {
                 Log.i("MYTAG", e.message().toString())
             } catch (t: Throwable) {
                 Log.i("MYTAG", t.message.toString())
@@ -67,19 +68,19 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    private fun getCharacters() {
+    fun getCharacters(page:Int = 1) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val response =
-                    repository.getCharactersFromNet("","","","","")
-                if (response.isSuccessful){
+                    repository.getCharactersFromNet(page,"", "", "", "", "")
+                if (response.isSuccessful) {
                     val characters = response.body()
-                    Log.i("MyTag",characters.toString())
-                    withContext(Dispatchers.Main){
-                        liveDatacharacters.value=characters!!
+                    Log.i("MyTag", characters.toString())
+                    withContext(Dispatchers.Main) {
+                        liveDatacharacters.value = characters!!
                     }
                 }
-            }catch (e: HttpException) {
+            } catch (e: HttpException) {
                 Log.i("MYTAG", e.message().toString())
             } catch (t: Throwable) {
                 Log.i("MYTAG", t.message.toString())
@@ -87,23 +88,70 @@ class MainViewModel : ViewModel() {
         }
     }
 
-     fun getOneEpisode(id:String){
-       val job = viewModelScope.launch(Dispatchers.IO) {
+    fun getOneEpisode(id: String) {
+        val job = viewModelScope.launch(Dispatchers.IO) {
             try {
                 val response =
                     repository.getOneEpisode(id)
-                if (response.isSuccessful){
+                if (response.isSuccessful) {
                     val episodeNet = response.body()
-                    withContext(Dispatchers.Main){
+                    withContext(Dispatchers.Main) {
                         liveDataOneEpisode.value = episodeNet
                     }
                 }
-            }catch (e: HttpException) {
+            } catch (e: HttpException) {
                 Log.i("MYTAG", e.message().toString())
             } catch (t: Throwable) {
                 Log.i("MYTAG", t.message.toString())
             }
         }
-        viewModelScope.launch{job.join()}
+        viewModelScope.launch { job.join() }
+    }
+
+    fun findCharacter( name:String, gender:String, status: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+
+            val response = repository.findCharacter(name,gender, status)
+            if (response.isSuccessful) {
+                val character = response.body()
+                Log.i("MySwag", character.toString())
+                withContext(Dispatchers.Main) {
+
+                    liveDataFindCharacter.value = character!!
+                }
+
+            }
+        }
+    }
+
+    fun findLocations( name:String, type:String, dimension: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+
+            val response = repository.findLocation(name,type, dimension)
+            if (response.isSuccessful) {
+                val character = response.body()
+                Log.i("MySwag", character.toString())
+                withContext(Dispatchers.Main) {
+
+                    liveDataFindLocation.value = character!!
+                }
+
+            }
+        }
+    }
+    fun findEpisode( name:String) {
+
+        viewModelScope.launch(Dispatchers.IO) {
+
+            val response = repository.findEpisode(name)
+            if (response.isSuccessful) {
+                val character = response.body()
+                Log.i("MySwag", character.toString())
+                withContext(Dispatchers.Main) {
+                    liveDataFindEpisode.value = character!!
+                }
+
+            }
+        }
     }
 }

@@ -23,6 +23,7 @@ class EpisodesFragment : Fragment(),ClickImp {
     private var _binding: FragmentEpisodesBinding? = null
     private val binding get() = _binding!!
     private lateinit var viewModel: MainViewModel
+    private var page = 2
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -38,7 +39,13 @@ class EpisodesFragment : Fragment(),ClickImp {
         viewModel.livedataEpisodes.observe(viewLifecycleOwner, {
             showList(it.results)
         })
-
+        binding.newListEpi.setOnClickListener({
+            viewModel.getEpisodes(page)
+            page++
+            if (page==4){
+                page=1
+            }
+        })
     }
 
     private fun showList(list: List<Episode>) {

@@ -25,6 +25,8 @@ class PersonsFragment : Fragment(), ClickImp {
     private var _binding: FragmentPersonsBinding? = null
     private val binding get() = _binding!!
     private lateinit var viewModel: MainViewModel
+    var page = 2
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -40,30 +42,42 @@ class PersonsFragment : Fragment(), ClickImp {
         viewModel.liveDatacharacters.observe(viewLifecycleOwner, {
             showList(it.results)
         })
+
+        binding.newList.setOnClickListener({
+            viewModel.getCharacters(page)
+            page++
+            if (page == 35){
+                page=1
+            }
+        })
     }
 
-    private fun showList(list: List<Character>) {
-        binding.recyclePersons.layoutManager = GridLayoutManager(
-            context, 1, GridLayoutManager.VERTICAL,
-            false
-        )
-        binding.recyclePersons.adapter = context?.let { Adapter(it, list, this) }
-    }
-
-    override fun onCardClickPerson(position: Int, list: List<Character>) {
-        val bundle = Bundle()
-        bundle.putSerializable(Util.KEY_PERSON, list.get(position))
-        val fragment = DescriptionFragment()
-        fragment.arguments = bundle
-
-        parentFragmentManager.beginTransaction().apply {
-            replace(R.id.container, fragment)
-            addToBackStack(null)
-            commit()
+        private fun showList(list: List<Character>) {
+            binding.recyclePersons.layoutManager = GridLayoutManager(
+                context, 1, GridLayoutManager.VERTICAL,
+                false
+            )
+            binding.recyclePersons.adapter = context?.let { Adapter(it, list, this) }
         }
+
+        override fun onCardClickPerson(position: Int, list: List<Character>) {
+            val bundle = Bundle()
+            bundle.putSerializable(Util.KEY_PERSON, list.get(position))
+            val fragment = DescriptionFragment()
+            fragment.arguments = bundle
+
+            parentFragmentManager.beginTransaction().apply {
+                replace(R.id.container, fragment)
+                addToBackStack(null)
+                commit()
+            }
+        }
+
+        override fun onCardClickLocation(
+            position: Int,
+            list: List<com.example.rick_and_mortywiki.Model.DataClasses.Location>
+        ) {
+        }
+
+        override fun onCardClickEpisode(position: Int, list: List<Episode>) {}
     }
-
-    override fun onCardClickLocation(position: Int, list: List<com.example.rick_and_mortywiki.Model.DataClasses.Location>) {}
-
-    override fun onCardClickEpisode(position: Int, list: List<Episode>) {}
-}

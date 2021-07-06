@@ -8,5 +8,6 @@ data class Episode(
     val name: String,
     val date:String,
     val episode: String,
+    val created:String,
     val characters:List<String>
 ):Serializable

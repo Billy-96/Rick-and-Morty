@@ -25,6 +25,7 @@ class LocationsFragment : Fragment(), ClickImp {
     private var _binding: FragmentLocationsBinding? = null
     private val binding get() = _binding!!
     private lateinit var viewModel: MainViewModel
+    private var page = 2
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,6 +41,14 @@ class LocationsFragment : Fragment(), ClickImp {
 
         viewModel.liveDataLocations.observe(viewLifecycleOwner, {
             showList(it.results)
+        })
+
+        binding.newListLoc.setOnClickListener({
+            viewModel.getLocations(page)
+            page++
+            if (page==7){
+                page=1
+            }
         })
     }
 

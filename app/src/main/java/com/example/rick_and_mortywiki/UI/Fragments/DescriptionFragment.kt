@@ -67,10 +67,20 @@ class DescriptionFragment : Fragment() {
         } catch (e: NullPointerException) {
             try {
                 val location = bundle?.getSerializable(Util.KEY_LOCATION) as Location
-
+                binding.apply {
+                    nameLocationDesc.text = location.name
+                    typeDescLoc.text = location.type
+                    dimensionDesc.text = location.dimension
+                }
+                TODO("residents")
             } catch (e: NullPointerException) {
                 try {
                     val episode = bundle?.getSerializable(Util.KEY_EPISODE) as Episode
+                    binding.apply {
+                        nameEpisodeDesc.text = episode.name
+                        airdateDesc.text = episode.date
+                        createdDesc.text = episode.created
+                    }
 
                 } catch (e: NullPointerException) {
                 }
