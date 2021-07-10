@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ListAdapter
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rick_and_mortywiki.Adapters.Adapter
 import com.example.rick_and_mortywiki.Adapters.AdapterLocEpi
@@ -46,18 +47,18 @@ class LocationsFragment : Fragment(), ClickImp {
         binding.newListLoc.setOnClickListener({
             viewModel.getLocations(page)
             page++
-            if (page==7){
-                page=1
+            if (page == 7) {
+                page = 1
             }
         })
     }
 
     private fun showList(list: List<Location>) {
         binding.recycleLocations.layoutManager = LinearLayoutManager(
-                context,
-                LinearLayoutManager.VERTICAL, false
-            )
-           binding.recycleLocations.adapter = context?.let { AdapterLocEpi(it, list, null,this) }
+            context,
+            LinearLayoutManager.VERTICAL, false
+        )
+        binding.recycleLocations.adapter = context?.let { AdapterLocEpi(it, list, null, this) }
     }
 
     override fun onCardClickPerson(position: Int, list: List<Character>) {
@@ -65,16 +66,14 @@ class LocationsFragment : Fragment(), ClickImp {
     }
 
     override fun onCardClickLocation(position: Int, list: List<Location>) {
-        val bundle = Bundle()
-        bundle.putSerializable(Util.KEY_LOCATION, list.get(position))
-        val fragment = DescriptionFragment()
-        fragment.arguments = bundle
+//        val bundle = Bundle()
+//        bundle.putSerializable(Util.KEY_LOCATION, list.get(position))
+//        val fragment = DescriptionFragment()
+//        fragment.arguments = bundle
 
-        parentFragmentManager.beginTransaction().apply {
-            replace(R.id.container, fragment)
-            addToBackStack(null)
-            commit()
-        }
+        val action = LocationsFragmentDirections.actionLocationsFragmentToDescriptionFragment(null,list[position],null)
+        Navigation.findNavController(binding.root)
+            .navigate(action)
     }
 
     override fun onCardClickEpisode(position: Int, list: List<Episode>) {}

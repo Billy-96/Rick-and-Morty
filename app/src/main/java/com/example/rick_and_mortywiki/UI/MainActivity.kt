@@ -14,6 +14,7 @@ import com.example.rick_and_mortywiki.UI.Fragments.LocationsFragment
 import com.example.rick_and_mortywiki.UI.Fragments.PersonsFragment
 import com.example.rick_and_mortywiki.UI.Fragments.SearchFragment
 import com.example.rick_and_mortywiki.databinding.ActivityMainBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
@@ -23,25 +24,10 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setFragment(PersonsFragment())
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragment) as NavHostFragment
 
-        val viewModel = MainViewModel()
+        val navController = navHostFragment.navController
+        binding.bottomNavigationView.setupWithNavController(navController)
 
-
-        binding.bottomNavigationView.setOnNavigationItemSelectedListener {
-            when(it.itemId){
-                R.id.person -> setFragment(PersonsFragment())
-                R.id.location -> setFragment(LocationsFragment())
-                R.id.episode -> setFragment(EpisodesFragment())
-                R.id.search -> setFragment(SearchFragment())
-            }
-            true
-        }
-    }
-    private fun setFragment(fragment: Fragment){
-        supportFragmentManager.beginTransaction().apply {
-            replace(R.id.container, fragment)
-            commit()
-        }
     }
 }

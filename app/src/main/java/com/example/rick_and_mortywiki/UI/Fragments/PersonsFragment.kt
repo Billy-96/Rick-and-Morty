@@ -7,9 +7,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.persistableBundleOf
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.NavHost
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rick_and_mortywiki.Adapters.Adapter
@@ -46,38 +48,37 @@ class PersonsFragment : Fragment(), ClickImp {
         binding.newList.setOnClickListener({
             viewModel.getCharacters(page)
             page++
-            if (page == 35){
-                page=1
+            if (page == 35) {
+                page = 1
             }
         })
     }
 
-        private fun showList(list: List<Character>) {
-            binding.recyclePersons.layoutManager = GridLayoutManager(
-                context, 1, GridLayoutManager.VERTICAL,
-                false
-            )
-            binding.recyclePersons.adapter = context?.let { Adapter(it, list, this) }
-        }
-
-        override fun onCardClickPerson(position: Int, list: List<Character>) {
-            val bundle = Bundle()
-            bundle.putSerializable(Util.KEY_PERSON, list.get(position))
-            val fragment = DescriptionFragment()
-            fragment.arguments = bundle
-
-            parentFragmentManager.beginTransaction().apply {
-                replace(R.id.container, fragment)
-                addToBackStack(null)
-                commit()
-            }
-        }
-
-        override fun onCardClickLocation(
-            position: Int,
-            list: List<com.example.rick_and_mortywiki.Model.DataClasses.Location>
-        ) {
-        }
-
-        override fun onCardClickEpisode(position: Int, list: List<Episode>) {}
+    private fun showList(list: List<Character>) {
+        binding.recyclePersons.layoutManager = GridLayoutManager(
+            context, 1, GridLayoutManager.VERTICAL,
+            false
+        )
+        binding.recyclePersons.adapter = context?.let { Adapter(it, list, this) }
     }
+
+    override fun onCardClickPerson(position: Int, list: List<Character>) {
+//        val bundle = Bundle()
+//        bundle.putSerializable(Util.KEY_PERSON, list.get(position))
+//        val fragment = DescriptionFragment()
+//        fragment.arguments = bundle
+
+        val action = PersonsFragmentDirections.actionPersonsFragmentToDescriptionFragment(list[position],null,null)
+
+        Navigation.findNavController(binding.root)
+            .navigate(action)
+    }
+
+    override fun onCardClickLocation(
+        position: Int,
+        list: List<com.example.rick_and_mortywiki.Model.DataClasses.Location>
+    ) {
+    }
+
+    override fun onCardClickEpisode(position: Int, list: List<Episode>) {}
+}

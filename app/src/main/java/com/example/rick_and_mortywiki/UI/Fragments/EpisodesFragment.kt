@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rick_and_mortywiki.Adapters.AdapterLocEpi
 import com.example.rick_and_mortywiki.Interfaces.ClickImp
@@ -64,15 +65,14 @@ class EpisodesFragment : Fragment(),ClickImp {
     override fun onCardClickLocation(position: Int, list: List<Location>) {}
 
     override fun onCardClickEpisode(position: Int, list: List<Episode>) {
-        val bundle = Bundle()
-        bundle.putSerializable(Util.KEY_EPISODE, list.get(position))
-        val fragment = DescriptionFragment()
-        fragment.arguments = bundle
+//        val bundle = Bundle()
+//        bundle.putSerializable(Util.KEY_EPISODE, list.get(position))
+//        val fragment = DescriptionFragment()
+//        fragment.arguments = bundle
 
-        parentFragmentManager.beginTransaction().apply {
-            replace(R.id.container, fragment)
-            addToBackStack(null)
-            commit()
-        }
+        val action = EpisodesFragmentDirections.actionEpisodesFragmentToDescriptionFragment(null,null,list[position])
+
+
+        Navigation.findNavController(binding.root).navigate(action)
     }
 }

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.rick_and_mortywiki.Model.DataClasses.Character
 import com.example.rick_and_mortywiki.Model.DataClasses.Episode
@@ -23,6 +24,8 @@ class DescriptionFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var viewModel: MainViewModel
     var listEpisodes = mutableListOf<Episode>()
+    var listOfIds = mutableListOf<String>()
+    val argument : DescriptionFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,15 +40,15 @@ class DescriptionFragment : Fragment() {
 
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
-        val bundle = this.arguments
+//        val bundle = this.arguments
         try {
-            val person = bundle?.getSerializable(Util.KEY_PERSON) as Character
-
+//            val person = bundle?.getSerializable(Util.KEY_PERSON) as Character
+            val  person = argument.character
 
             binding.constraintPerson.visibility = View.VISIBLE
             binding.apply {
-                context?.let { Glide.with(it).load(person.image).into(imageDesc) }
-                namePersonDesc.text = person.name
+                context?.let { Glide.with(it).load(person!!.image).into(imageDesc) }
+                namePersonDesc.text = person!!.name
                 statusDesc.text = person.status
                 speciesDesc.text = person.species
                 genderDesc.text = person.gender
@@ -53,11 +56,12 @@ class DescriptionFragment : Fragment() {
                     if (i.length > 41) {
                         var string =
                             i.toCharArray().get(40).toString() + i.toCharArray().get(41).toString()
-                        viewModel.getOneEpisode(string)
+                        listOfIds.add(string)
                     } else {
-                        viewModel.getOneEpisode(i.toCharArray().get(40).toString())
+                        listOfIds.add(i.toCharArray().get(40).toString())
                     }
                 }
+                viewModel.getCharacters()
                 viewModel.liveDataOneEpisode.observe(viewLifecycleOwner,{
                     listEpisodes.add(it)
                     Log.i("Myf",listEpisodes.toString())
@@ -66,18 +70,20 @@ class DescriptionFragment : Fragment() {
             }
         } catch (e: NullPointerException) {
             try {
-                val location = bundle?.getSerializable(Util.KEY_LOCATION) as Location
+//                val location = bundle?.getSerializable(Util.KEY_LOCATION) as Location
+                val location = argument.location
                 binding.apply {
-                    nameLocationDesc.text = location.name
+                    nameLocationDesc.text = location!!.name
                     typeDescLoc.text = location.type
                     dimensionDesc.text = location.dimension
                 }
                 TODO("residents")
             } catch (e: NullPointerException) {
                 try {
-                    val episode = bundle?.getSerializable(Util.KEY_EPISODE) as Episode
+//                    val episode = bundle?.getSerializable(Util.KEY_EPISODE) as Episode
+                    val episode = argument.episode
                     binding.apply {
-                        nameEpisodeDesc.text = episode.name
+                        nameEpisodeDesc.text = episode!!.name
                         airdateDesc.text = episode.date
                         createdDesc.text = episode.created
                     }

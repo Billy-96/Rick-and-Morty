@@ -28,10 +28,10 @@ interface NetworkUtils {
         @Query("gender") gender: String
     ): Response<CharacterNet>
 
-    @GET("episode/{id}")
-    suspend fun getOneEpisode(
-        @Path("id") id: String
-    ): Response<Episode>
+    @GET("character/{id}")
+    suspend fun getListChar(
+        @Path("id") id: List<String>
+    ): Response<EpisodeNet>
 
     @GET("location")
     suspend fun getLocationFromNet(
@@ -59,6 +59,11 @@ interface NetworkUtils {
     suspend fun findEpisodes(
         @Query("name") name: String
     ): Response<EpisodeNet>
+
+    @GET("episode/{id}")
+    suspend fun getOneEpisode(
+        @Path("id") id: String,
+    ): Response<Episode>
 
     companion object {
         private var retrofitService: NetworkUtils? = null

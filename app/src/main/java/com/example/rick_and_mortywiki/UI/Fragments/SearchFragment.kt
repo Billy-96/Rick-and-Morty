@@ -11,6 +11,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.rick_and_mortywiki.Adapters.Adapter
@@ -26,15 +27,15 @@ import com.example.rick_and_mortywiki.databinding.FragmentSearchBinding
 import com.example.rick_and_mortywiki.databinding.MaketForDialogueLocationBinding
 import com.example.rick_and_mortywiki.databinding.MaketForDialoguePersonBinding
 
-class SearchFragment : Fragment(),ClickImp {
+class SearchFragment : Fragment(), ClickImp {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
     private lateinit var viewModel: MainViewModel
     lateinit var spinnerSelected: String
     var status: String = ""
-    var gender:String = ""
+    var gender: String = ""
     var type: String = ""
-    var dimension:String = ""
+    var dimension: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,14 +50,14 @@ class SearchFragment : Fragment(),ClickImp {
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
 
-        viewModel.liveDataFindCharacter.observe(viewLifecycleOwner,{
-            showListCharacter(it.results,binding.recycleSearch)
+        viewModel.liveDataFindCharacter.observe(viewLifecycleOwner, {
+            showListCharacter(it.results, binding.recycleSearch)
         })
-        viewModel.liveDataFindLocation.observe(viewLifecycleOwner,{
-            showListLocation(it.results,null,binding.recycleSearch)
+        viewModel.liveDataFindLocation.observe(viewLifecycleOwner, {
+            showListLocation(it.results, null, binding.recycleSearch)
         })
-        viewModel.liveDataFindEpisode.observe(viewLifecycleOwner,{
-            showListLocation(null,it.results,binding.recycleSearch)
+        viewModel.liveDataFindEpisode.observe(viewLifecycleOwner, {
+            showListLocation(null, it.results, binding.recycleSearch)
         })
 
         sendingResponse()
@@ -87,8 +88,8 @@ class SearchFragment : Fragment(),ClickImp {
                     openDialogPersons()
                 } else if (spinnerSelected == "Locations") {
                     openDialogueLocations()
-                }else if (spinnerSelected == "Episodes"){
-                    Toast.makeText(context,"Введите название эпизода", Toast.LENGTH_SHORT).show()
+                } else if (spinnerSelected == "Episodes") {
+                    Toast.makeText(context, "Введите название эпизода", Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -99,18 +100,22 @@ class SearchFragment : Fragment(),ClickImp {
 
     }
 
-    private fun showListCharacter(list: List<Character>,recyclerView: RecyclerView){
+    private fun showListCharacter(list: List<Character>, recyclerView: RecyclerView) {
         recyclerView.layoutManager =
             LinearLayoutManager(parentFragment?.context, LinearLayoutManager.HORIZONTAL, false)
         recyclerView.setHasFixedSize(true)
         recyclerView.adapter = Adapter(requireContext(), list, this)
     }
 
-    private fun showListLocation(listLoc: List<Location> ?= null,listEpi: List<Episode> ?= null,recyclerView: RecyclerView){
+    private fun showListLocation(
+        listLoc: List<Location>? = null,
+        listEpi: List<Episode>? = null,
+        recyclerView: RecyclerView
+    ) {
         recyclerView.layoutManager =
             LinearLayoutManager(parentFragment?.context, LinearLayoutManager.HORIZONTAL, false)
         recyclerView.setHasFixedSize(true)
-        recyclerView.adapter = AdapterLocEpi(requireContext(), listLoc,listEpi, this)
+        recyclerView.adapter = AdapterLocEpi(requireContext(), listLoc, listEpi, this)
     }
 
 
@@ -225,8 +230,8 @@ class SearchFragment : Fragment(),ClickImp {
         val bindingLocation = MaketForDialogueLocationBinding.inflate(layoutInflater)
         dialog.setView(bindingLocation.root)
         dialog.setPositiveButton("Ввести параметры") { _, _ ->
-             type = bindingLocation.typeDialogue.text.toString()
-             dimension = bindingLocation.dimensionDialogue.text.toString()
+            type = bindingLocation.typeDialogue.text.toString()
+            dimension = bindingLocation.dimensionDialogue.text.toString()
         }
 
         dialog.setNegativeButton("Отмена") { _, _ ->
@@ -240,12 +245,12 @@ class SearchFragment : Fragment(),ClickImp {
         binding.searchTextButton.setOnClickListener({
             if (binding.searchText.text.toString().isNotEmpty()) {
                 if (spinnerSelected.equals("Episodes")) {
-                    Log.i("MyLog","It works")
+                    Log.i("MyLog", "It works")
                     viewModel.findEpisode(binding.searchText.text.toString())
-                }else if (spinnerSelected.equals("Characters")){
-                    viewModel.findCharacter(binding.searchText.text.toString(),gender,status)
-                }else if (spinnerSelected.equals("Locations")){
-                    viewModel.findLocations(binding.searchText.text.toString(),type,dimension)
+                } else if (spinnerSelected.equals("Characters")) {
+                    viewModel.findCharacter(binding.searchText.text.toString(), gender, status)
+                } else if (spinnerSelected.equals("Locations")) {
+                    viewModel.findLocations(binding.searchText.text.toString(), type, dimension)
                 }
             }
         })
@@ -257,11 +262,9 @@ class SearchFragment : Fragment(),ClickImp {
         val fragment = DescriptionFragment()
         fragment.arguments = bundle
 
-        parentFragmentManager.beginTransaction().apply {
-            replace(R.id.container, fragment)
-            addToBackStack(null)
-            commit()
-        }    }
+        Navigation.findNavController(binding.root)
+            .navigate(R.id.action_searchFragment_to_descriptionFragment)
+    }
 
     override fun onCardClickLocation(position: Int, list: List<Location>) {
         val bundle = Bundle()
@@ -269,11 +272,9 @@ class SearchFragment : Fragment(),ClickImp {
         val fragment = DescriptionFragment()
         fragment.arguments = bundle
 
-        parentFragmentManager.beginTransaction().apply {
-            replace(R.id.container, fragment)
-            addToBackStack(null)
-            commit()
-        }    }
+        Navigation.findNavController(binding.root)
+            .navigate(R.id.action_searchFragment_to_descriptionFragment)
+    }
 
     override fun onCardClickEpisode(position: Int, list: List<Episode>) {
         val bundle = Bundle()
@@ -281,9 +282,7 @@ class SearchFragment : Fragment(),ClickImp {
         val fragment = DescriptionFragment()
         fragment.arguments = bundle
 
-        parentFragmentManager.beginTransaction().apply {
-            replace(R.id.container, fragment)
-            addToBackStack(null)
-            commit()
-        }    }
+        Navigation.findNavController(binding.root)
+            .navigate(R.id.action_searchFragment_to_descriptionFragment)
+    }
 }

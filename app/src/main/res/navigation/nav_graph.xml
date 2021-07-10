@@ -10,14 +10,8 @@
         android:label="fragment_episodes"
         tools:layout="@layout/fragment_episodes" >
         <action
-            android:id="@+id/episodesFragment_to_locationsFragment"
-            app:destination="@id/locationsFragment" />
-        <action
-            android:id="@+id/episodesFragment_to_searchFragment"
-            app:destination="@id/searchFragment" />
-        <action
-            android:id="@+id/episodesFragment_to_personsFragment3"
-            app:destination="@id/personsFragment" />
+            android:id="@+id/action_episodesFragment_to_descriptionFragment"
+            app:destination="@id/descriptionFragment" />
     </fragment>
     <fragment
         android:id="@+id/locationsFragment"
@@ -25,14 +19,8 @@
         android:label="fragment_locations"
         tools:layout="@layout/fragment_locations" >
         <action
-            android:id="@+id/locationsFragment_to_episodesFragment"
-            app:destination="@id/episodesFragment" />
-        <action
-            android:id="@+id/locationsFragment_to_personsFragment"
-            app:destination="@id/personsFragment" />
-        <action
-            android:id="@+id/locationsFragment_to_searchFragment"
-            app:destination="@id/searchFragment" />
+            android:id="@+id/action_locationsFragment_to_descriptionFragment"
+            app:destination="@id/descriptionFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -40,14 +28,8 @@
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" >
         <action
-            android:id="@+id/action_searchFragment_to_personsFragment3"
-            app:destination="@id/personsFragment" />
-        <action
-            android:id="@+id/searchFragment_to_locationsFragment"
-            app:destination="@id/locationsFragment" />
-        <action
-            android:id="@+id/searchFragment_to_episodesFragment"
-            app:destination="@id/episodesFragment" />
+            android:id="@+id/action_searchFragment_to_descriptionFragment"
+            app:destination="@id/descriptionFragment" />
     </fragment>
     <fragment
         android:id="@+id/personsFragment"
@@ -55,13 +37,25 @@
         android:label="fragment_persons"
         tools:layout="@layout/fragment_persons" >
         <action
-            android:id="@+id/personsFragment_to_locationsFragment"
-            app:destination="@id/locationsFragment" />
-        <action
-            android:id="@+id/personsFragment_to_searchFragment"
-            app:destination="@id/searchFragment" />
-        <action
-            android:id="@+id/personsFragment_to_episodesFragment"
-            app:destination="@id/episodesFragment" />
+            android:id="@+id/action_personsFragment_to_descriptionFragment"
+            app:destination="@id/descriptionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/descriptionFragment"
+        android:name="com.example.rick_and_mortywiki.UI.Fragments.DescriptionFragment"
+        android:label="fragment_description"
+        tools:layout="@layout/fragment_description" >
+        <argument
+            android:name="character"
+            app:argType="com.example.rick_and_mortywiki.Model.DataClasses.Character"
+            app:nullable="true"/>
+        <argument
+            android:name="location"
+            app:nullable="true"
+            app:argType="com.example.rick_and_mortywiki.Model.DataClasses.Location" />
+        <argument
+            android:name="episode"
+            app:argType="com.example.rick_and_mortywiki.Model.DataClasses.Episode"
+            app:nullable="true" />
     </fragment>
 </navigation>
