@@ -66,14 +66,10 @@ class LocationsFragment : Fragment(), ClickImp {
     }
 
     override fun onCardClickLocation(position: Int, list: List<Location>) {
-//        val bundle = Bundle()
-//        bundle.putSerializable(Util.KEY_LOCATION, list.get(position))
-//        val fragment = DescriptionFragment()
-//        fragment.arguments = bundle
-
-        val action = LocationsFragmentDirections.actionLocationsFragmentToDescriptionFragment(null,list[position],null)
-        Navigation.findNavController(binding.root)
-            .navigate(action)
+        val action = LocationsFragmentDirections.actionLocationsFragmentToDescriptionFragment(
+            null,list[position],null
+        )
+        Navigation.findNavController(binding.root).navigate(action)
     }
 
     override fun onCardClickEpisode(position: Int, list: List<Episode>) {}

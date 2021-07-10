@@ -39,13 +39,11 @@ class DescriptionFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-
-//        val bundle = this.arguments
         try {
-//            val person = bundle?.getSerializable(Util.KEY_PERSON) as Character
             val  person = argument.character
-
             binding.constraintPerson.visibility = View.VISIBLE
+            binding.constraintLocation.visibility = View.GONE
+            binding.constraintEpisode.visibility = View.GONE
             binding.apply {
                 context?.let { Glide.with(it).load(person!!.image).into(imageDesc) }
                 namePersonDesc.text = person!!.name
@@ -70,18 +68,21 @@ class DescriptionFragment : Fragment() {
             }
         } catch (e: NullPointerException) {
             try {
-//                val location = bundle?.getSerializable(Util.KEY_LOCATION) as Location
                 val location = argument.location
+                binding.constraintLocation.visibility = View.VISIBLE
+                binding.constraintPerson.visibility = View.GONE
+                binding.constraintEpisode.visibility = View.GONE
                 binding.apply {
                     nameLocationDesc.text = location!!.name
                     typeDescLoc.text = location.type
                     dimensionDesc.text = location.dimension
                 }
-                TODO("residents")
             } catch (e: NullPointerException) {
                 try {
-//                    val episode = bundle?.getSerializable(Util.KEY_EPISODE) as Episode
                     val episode = argument.episode
+                    binding.constraintEpisode.visibility = View.VISIBLE
+                    binding.constraintPerson.visibility = View.GONE
+                    binding.constraintLocation.visibility = View.GONE
                     binding.apply {
                         nameEpisodeDesc.text = episode!!.name
                         airdateDesc.text = episode.date
